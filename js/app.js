@@ -1,12 +1,28 @@
 $(document).ready(function(){
+  initPlayer();
   getSongs();
 });
 
-var audio = document.getElementById('player');
+var audio
 var music;
 
+audio = document.getElementById('player');
+
+function initPlayer(){
+  $('#shuffle').click(function(){
+    /* empty = elimina todos los nodos secundarios
+               y el contenido de los elementos
+               seleccionados del DOM
+    */
+    $('#playlist').empty();
+    console.log(shuffle(music.songs));
+    genList(music);
+    playSong(0);
+  });
+}
+
 function getSongs(){
-  $.getJSON("js/app.json", function(mjson){
+  $.getJSON("./js/app.json", function(mjson){
     music = mjson;
     // console.log(music);
     genList(music);
@@ -46,4 +62,9 @@ function scheduleSong(id){
     console.log('terminó la canción');
     playSong(parseInt(id)+1);
   }
+}
+
+function shuffle(array){
+  for(var random, temp, position = array.length; position; random = Math.floor(Math.random() * position), temp = array[--position], array[position] = array[random], array[random] = temp);
+  return array;
 }
